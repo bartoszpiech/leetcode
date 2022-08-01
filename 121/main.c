@@ -3,21 +3,19 @@
 #include <string.h>
 
 int maxProfit(int *prices, int pricesSize) {
-    int minPrice = prices[0];
-    int minPriceInd = 0;
-    for (int i = 0; i < pricesSize; i++) {
-        if (minPrice > prices[i]) {
-            minPrice = prices[i];
-            minPriceInd = i;
+    int result = 0;
+    int min = prices[0], max = prices[0];
+    for (int i = 1; i < pricesSize; i++) {
+        if (max < prices[i]) {
+            max = prices[i];
+            result = result < max - min ? max - min : result;
+        }
+        if (min > prices[i]) {
+            min = prices[i];
+            max = prices[i];
         }
     }
-    int maxPrice = minPrice;
-    for (int i = minPriceInd; i < pricesSize; i++) {
-        if (maxPrice < prices[i]) {
-            maxPrice = prices[i];
-        }
-    }
-    return maxPrice - minPrice;
+    return result;
 }
 
 int main() {
