@@ -18,7 +18,7 @@ int** matrixReshape(int** mat, int matSize, int* matColSize, int r, int c, int* 
             int ind = i * matColSize[i] + j;
             int indr = ind / c;
             int indc = ind % c;
-            printf("$$%d - %d %d$$\n", ind, indr, indc);
+            //printf("$$%d - %d %d$$\n", ind, indr, indc);
             resultMatrix[indr][indc] = mat[i][j];
         }
     }
@@ -54,7 +54,7 @@ int main() {
     int retsize;
     int *retcolsize;
     int **matrix_converted = matrixReshape(matrix, rows, cols, 4, 1, &retsize, &retcolsize);
-    printf("## %d %d ##\n", retsize, retcolsize[0]);
+    //printf("## %d %d ##\n", retsize, retcolsize[0]);
     print(matrix_converted, retsize, retcolsize);
     return 0;
 }
