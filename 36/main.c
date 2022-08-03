@@ -3,7 +3,6 @@
 #include <stdbool.h>
 
 bool isValidSudoku(char board[][9], int boardSize, int* boardColSize){
-    // check horizontal
     int hashmapbox[3][3][10] = { 0 };
     int hashmapvert[9][10] = { 0 };
     for (int i = 0; i < boardSize; i++) {
@@ -12,35 +11,20 @@ bool isValidSudoku(char board[][9], int boardSize, int* boardColSize){
             if (board[i][j] == '.') {
                 continue;
             }
+            // check horizontal
             if (hashmap[board[i][j] - 48]++ > 0) {
                 return false;
             }
+            // check vertical
             if (hashmapvert[j][board[i][j] - 48]++ > 0) {
                 return false;
             }
-            //printf("[%d][%d][%c]\n", (i) / 3, (j) / 3, board[i][j]);
+            // check boxes
             if (hashmapbox[i / 3][j / 3][board[i][j] - 48]++ > 0) {
-                //printf("[%d][%d][%c]\n", (i + 1) / 3, (j + 1) / 3, board[i][j]);
                 return false;
             }
         }
     }
-    /*
-    int hashmapbox[10] = { 0 };
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            //int ind = (8 + 1) / 3;
-            //printf("%d - %d %d \n", ind, i, j);
-            if (board[i][j] == '.') {
-                continue;
-            }
-            if (hashmapbox[board[i][j] - 48]++ > 0) {
-                //printf("%d %d - %c\n", i, j, board[i][j]);
-                return false;
-            }
-        }
-    }
-    */
     return true;
 }
 
