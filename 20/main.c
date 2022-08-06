@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 typedef struct node_t {
-    char val;
+    int val;
     struct node_t *next;
 } node_t;
 
@@ -26,17 +26,21 @@ bool stack_is_empty(stack_t *s) {
     return false;
 }
 
-char stack_pop(stack_t *s) {
+int stack_pop(stack_t *s) {
     if (stack_is_empty(s)) {
         fprintf(stderr, "Error, stack underflow\n");
         exit(1);
     }
-    char return_val = s->top->val;
+    int return_val = s->top->val;
     node_t *tmp = s->top;
     s->top = s->top->next;
     free(tmp);
     s->size--;
     return return_val;
+}
+
+int stack_peek(stack_t *s) {
+    return s->top->val;
 }
 
 
@@ -56,7 +60,7 @@ void stack_print(stack_t *s) {
     printf(" NULL\n");
 }
 
-void stack_push(stack_t *s, char value) {
+void stack_push(stack_t *s, int value) {
     node_t *tmp = malloc(sizeof(node_t));
     tmp->val = value;
     tmp->next = s->top;
@@ -64,18 +68,49 @@ void stack_push(stack_t *s, char value) {
     s->size++;
 }
 
-bool isValid(char * s){
+bool isValid(char *s){
     stack_t *stack = stack_init();
     for (int i = 0; s[i] != '\0'; i++) {
-        stack_push(stack, s[i])
+        switch(s[i]) {
+            case '(':
+                stack_push(stack, 1);
+                break;
+            case ')':
+                if (stack_peek(stack) != 1) {
+                    return false;
+                }
+                stack_pop(stack);
+            case '[':
+                stack_push(stack, 2);
+                break;
+            case ']':
+                if (stack_peek(stack) != 2) {
+                    return false;
+                }
+                stack_pop(stack);
+            case '{':
+                stack_push(stack, 3);
+                break;
+            case '}':
+                if (stack_peek(stack) != 3) {
+                    return false;
+                }
+                stack_pop(stack);
+                break;
+            default:
+                fprintf(stderr, "Error, invalid character in isValid fcn argument\n");
+                exit(1);
+                break;
+        }
     }
-    stack_free(stack);
-
+    return true;
 }
 
 int main() {
     printf("%s\n", isValid("()") ? "true" : "false");
     printf("%s\n", isValid("()[]{}") ? "true" : "false");
     printf("%s\n", isValid("(]") ? "true" : "false");
+    printf("%s\n", isValid("(]]") ? "true" : "false");
+    printf("%s\n", isValid("") ? "true" : "false");
     return 0;
 }
