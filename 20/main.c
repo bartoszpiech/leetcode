@@ -73,20 +73,26 @@ bool isValid(char *s){
     for (int i = 0; s[i] != '\0'; i++) {
         if (s[i] == 40 || s[i] == 91 || s[i] == 123) {
             stack_push(stack, s[i]);
-        } else if { (s[i] - stack_peek(stack) <= 2 && s[i] - stack_peek >= 1) {
+        } else if (!stack_is_empty(stack) && s[i] - stack_peek(stack) <= 2 && s[i] - stack_peek(stack) >= 1) {
             stack_pop(stack);
         } else {
+            stack_free(stack);
             return false;
         }
     }
-    return true;
+    if (stack_is_empty(stack)) {
+        stack_free(stack);
+        return true;
+    }
+    stack_free(stack);
+    return false;
 }
-
 int main() {
     printf("%s\n", isValid("()") ? "true" : "false");
     printf("%s\n", isValid("()[]{}") ? "true" : "false");
     printf("%s\n", isValid("(]") ? "true" : "false");
     printf("%s\n", isValid("(]]") ? "true" : "false");
     printf("%s\n", isValid("") ? "true" : "false");
+    printf("%s\n", isValid("[") ? "true" : "false");
     return 0;
 }
