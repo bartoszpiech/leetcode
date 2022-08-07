@@ -3,33 +3,24 @@
 #include <stdbool.h>
 
 bool searchMatrix(int matrix[][4], int matrixSize, int* matrixColSize, int target){
-    // search row
-    int lind = 0, rind = matrixSize;
+    int colSize = matrixColSize[0]; // assume that colSize is const for every row
+    int lind = 0;
+    int rind = matrixSize * colSize;    // convert indexes to 1d array
+    printf("%d -- %d\n", lind, rind);
     int ind;
-    if (target > matrix[matrixSize - 1][matrixColSize[matrixSize - 1] - 1] ||
-        target < matrix[0][0]) {
-        return false;
-    }
-    while (lind <= rind) {
+    while (lind < rind) {
         int mid = lind + (rind - lind) / 2;
-        printf("%d - %d %d\n", mid, lind, rind);
-        printf("%d %d ---\n", matrix[mid][0], matrix[mid][matrixColSize[mid] - 1]);
-        if (matrix[mid][0] <= target && matrix[mid][matrixColSize[mid] - 1] >= target) {
-            ind = mid;
-            break;
-        }
-        else if (matrix[mid][0] > target) {
+        int r = mid / colSize;  // convert to 2d array
+        int c = mid % colSize;
+        if (matrix[r][c] == target) {
+            return true;
+        } else if (matrix[r][c] > target) {
             rind = mid;
-        }
-        else if (matrix[mid][0] < target) {
-            lind = mid;
         } else {
-            ind = -1;
-            break;
+            lind = mid + 1;
         }
     }
-    // search inside the row
-    printf("%d -- row", ind);
+    return false;
 }
 
 void print(int mat[][4], int matSize, int* matColSize) {
@@ -53,6 +44,6 @@ int main() {
     int matrixColSize[] = { 4, 4, 4, 4 };
     int target = 8;
     print(matrix, matrixSize, matrixColSize);
-    searchMatrix(matrix, matrixSize, matrixColSize, target);
+    printf("%s\n", searchMatrix(matrix, matrixSize, matrixColSize, target) ? "true" : "false");
     return 0;
 }
